@@ -1,7 +1,7 @@
 package jpabook.jpashop;
 
-import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.repository.MemberRepository;
+import jpabook.jpashop.settingtest.SettingTestMember;
+import jpabook.jpashop.settingtest.SettingTestMemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class MemberRepositoryTest {
+class SettingTestSettingTestMemberRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    SettingTestMemberRepository settingTestMemberRepository;
 
     @Test
     @DisplayName("멤버 테스트")
@@ -26,16 +26,16 @@ class MemberRepositoryTest {
     @Rollback(value = false)
     void testMember() {
         // given
-        Member member = new Member();
-        member.setUsername("memberA");
+        SettingTestMember settingTestMember = new SettingTestMember();
+        settingTestMember.setUsername("memberA");
 
         // when
-        Long saveId = memberRepository.save(member);
-        Member findMember = memberRepository.find(saveId);
+        Long saveId = settingTestMemberRepository.save(settingTestMember);
+        SettingTestMember findSettingTestMember = settingTestMemberRepository.find(saveId);
 
         // then
-        assertThat(findMember.getId()).isEqualTo(member.getId());
-        assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
-        assertThat(findMember).isEqualTo(member);
+        assertThat(findSettingTestMember.getId()).isEqualTo(settingTestMember.getId());
+        assertThat(findSettingTestMember.getUsername()).isEqualTo(settingTestMember.getUsername());
+        assertThat(findSettingTestMember).isEqualTo(settingTestMember);
     }
 }
