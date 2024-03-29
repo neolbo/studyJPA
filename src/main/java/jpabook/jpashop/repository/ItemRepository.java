@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemRepository {
 
-    private EntityManager em;
+    private final EntityManager em;
 
     public void save(Item item) {
         if (item.getId() == null) {     // 새로 등록하는 경우 id == null  ==> persist
