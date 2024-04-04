@@ -19,7 +19,7 @@ public class ItemService {
      *  고민해볼 수 있음
      */
 
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
     @Transactional
     public void saveItem(Item item) {
