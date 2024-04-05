@@ -1,0 +1,22 @@
+  spring:
+#    datasource:
+#      url: jdbc:h2:mem:test      ==> in memory URL  h2 홈페이지에 있음
+#      username: sa
+#      password:
+#      driver-class-name: org.h2.Driver
+#
+#    jpa:
+#      hibernate:
+#        ddl-auto: create
+#      properties:
+#        hibernate:
+#          format_sql: true
+
+#   ** 스프링 부트는 datasource 설정이 없으면 기본적인 '메모리 DB'를 사용   ==> 독립적인 테스트 가능
+#       diver-class 도 현재 등록된 라이브러리를 보고 찾아줌
+#       ddl-auto : create-drop 모드로 동작 ==> datasource 나 jpa 설정 안해도 됨!!
+
+
+  logging.level:
+    org.hibernate.SQL: debug
+#    org.hibernate.orm.jdbc.bind: trace
