@@ -32,8 +32,9 @@ public class Member {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void changeTeam(Team team) {
         this.team = team;
+        team.getMembers().add(this);        // 연관 관계 편의
     }
 
     public String getName() {
@@ -43,4 +44,5 @@ public class Member {
     public void setName(String name) {
         this.name = name;
     }
+
 }
