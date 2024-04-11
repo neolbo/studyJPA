@@ -17,7 +17,7 @@ public class JpaMain {
 
         try {
             /**
-             * 객체를 테이블에 맞추어 모델링 시
+             * 객체 지향 모델링 시
              */
 
             // 저장
@@ -25,14 +25,27 @@ public class JpaMain {
             team.setName("TeamA");
             em.persist(team);
 
+            Team newTeam = new Team();
+            newTeam.setName("TeamB");
+            em.persist(newTeam);
+
             Member member = new Member();
             member.setName("userA");
-            member.setTeam_id(team.getId());
+            member.setTeam(team);
             em.persist(member);
 
             // 조회 시  - 다른 트렌젝션에 있다고 가정
             Member findMember = em.find(Member.class, 1L);
-            Team findTeam = em.find(Team.class, findMember.getTeam_id());
+            Team findTeam = findMember.getTeam();
+
+            System.out.println("findTeam.getName()=" + findTeam.getName());
+
+            // 멤버의 팀 수정
+            member.setTeam(newTeam);
+            Member findNewMember = em.find(Member.class, 1L);
+            Team findNewTeam = findMember.getTeam();
+            System.out.println("findNewTeam.getName()=" + findNewTeam.getName());
+
 
             tx.commit();
         } catch (Exception e) {

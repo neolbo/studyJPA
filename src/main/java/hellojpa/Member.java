@@ -10,8 +10,12 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "team_id")
-    private Long team_id;
+//    @Column(name = "team_id")
+//    private Long team_id;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Column(name = "username")
     private String name;
@@ -24,12 +28,12 @@ public class Member {
         this.id = id;
     }
 
-    public Long getTeam_id() {
-        return team_id;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeam_id(Long team_id) {
-        this.team_id = team_id;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public String getName() {
