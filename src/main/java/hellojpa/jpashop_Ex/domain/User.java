@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 @SequenceGenerator(name = "user-seq-generator", sequenceName = "user-seq")
 public class User {
 
