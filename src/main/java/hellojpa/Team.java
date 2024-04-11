@@ -3,17 +3,12 @@ package hellojpa;
 import jakarta.persistence.*;
 
 @Entity
-@SequenceGenerator(name = "member_seq_generator", sequenceName = "member_seq")
-public class Member {
+@SequenceGenerator(name = "team_seq_generator", sequenceName = "team_seq")
+public class Team {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "member_id")
-    private Long id;
-
     @Column(name = "team_id")
-    private Long team_id;
-
-    @Column(name = "username")
+    private Long id;
     private String name;
 
     public Long getId() {
@@ -22,14 +17,6 @@ public class Member {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getTeam_id() {
-        return team_id;
-    }
-
-    public void setTeam_id(Long team_id) {
-        this.team_id = team_id;
     }
 
     public String getName() {

@@ -17,34 +17,22 @@ public class JpaMain {
 
         try {
             /**
-             * 데이터 등록
+             * 객체를 테이블에 맞추어 모델링 시
              */
-            /*Member member = new Member();
-            member.setId(3L);
-            member.setName("HelloDDDD");
 
-            em.persist(member);*/
+            // 저장
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            /**
-             * 데이터 수정
-             */
-            /*Member findMember = em.find(Member.class, 1L);
-            findMember.setName("HelloJPA");*/
+            Member member = new Member();
+            member.setName("userA");
+            member.setTeam_id(team.getId());
+            em.persist(member);
 
-            /**
-             * 데이터 삭제
-              */
-            /*Member removeMember = em.find(Member.class, 2L);
-            em.remove(removeMember);*/
-
-            /**
-             * 특정 데이터 조회
-             */
-            List<Member> resultList = em.createQuery("select m from Member m where m.id >= 2L ", Member.class)
-                    .getResultList();
-            for (Member member : resultList) {
-                System.out.println("member.name = " + member.getName());
-            }
+            // 조회 시  - 다른 트렌젝션에 있다고 가정
+            Member findMember = em.find(Member.class, 1L);
+            Team findTeam = em.find(Team.class, findMember.getTeam_id());
 
             tx.commit();
         } catch (Exception e) {
