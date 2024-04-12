@@ -1,7 +1,5 @@
 package hellojpa;
 
-import hellojpa.jpashop_Ex.domain.Order;
-import hellojpa.jpashop_Ex.domain.OrderItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -19,13 +17,10 @@ public class JpaMain {
         tx.begin();
 
         try {
-            /**
-             * jpashop 예제  ( 양방향 매핑)
-             */
+            // 연관 관계 매핑 예제
 
-            Order order = new Order();
-            order.addOrderItems(new OrderItem());
-
+            // 연관 관계 편의 메서드 일단 생략
+            
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
