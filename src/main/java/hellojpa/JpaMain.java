@@ -1,11 +1,14 @@
 package hellojpa;
 
+import hellojpa.jpashop_Ex.domain.Member;
 import hellojpa.jpashop_Ex.inheritanceMapping.Goods;
 import hellojpa.jpashop_Ex.inheritanceMapping.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+
+import java.time.LocalDateTime;
 
 public class JpaMain {
 
@@ -20,22 +23,11 @@ public class JpaMain {
 
         try {
 
-            Movie movie = new Movie();
-            movie.setDirector("Director AA");
-            movie.setActor("Actor BB");
-            movie.setName("NEW MOVIE");
-            movie.setPrice(10000);
-
-            em.persist(movie);
-
-            em.flush();
-            em.clear();
-
-            Movie findMovie = em.find(Movie.class, movie.getId());
-
-            em.clear();
-
-            Goods findGoods = em.find(Goods.class, movie.getId());
+            Member member = new Member();
+            member.setCreatedBy("AA");
+            member.setCreatedDate(LocalDateTime.now());
+            member.setLastModifiedBy("BBB");
+            member.setLastModifiedDate(LocalDateTime.now());
 
             tx.commit();
         } catch (Exception e) {
