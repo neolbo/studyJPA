@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @SequenceGenerator(name = "category_item_seq_generator", sequenceName = "category_item_seq")
-public class CategoryItem {
+public class CategoryItem extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "category_item_id")

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @SequenceGenerator(name = "delivery_seq_generator", sequenceName = "delivery_seq")
-public class Delivery {
+public class Delivery extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "delivery_id")

@@ -1,11 +1,11 @@
-package hellojpa.jpashop_Ex.inheritanceMapping;
+package hellojpa.jpashop_Ex.domain;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("M")
-public class Movie extends Goods {
+public class Movie extends Item {
     private String director;
     private String actor;
 

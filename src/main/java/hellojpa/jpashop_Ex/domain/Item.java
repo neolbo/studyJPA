@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 
 @Entity
 @SequenceGenerator(name = "item_seq_generator", sequenceName = "item_seq")
-public class Item {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Item {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "item_id")
     private Long id;
 

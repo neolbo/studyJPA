@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @SequenceGenerator(name = "orderItem_seq_generator", sequenceName = "orderItem_seq")
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "order_item_id")

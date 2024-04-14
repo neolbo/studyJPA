@@ -1,8 +1,6 @@
 package hellojpa;
 
 import hellojpa.jpashop_Ex.domain.Member;
-import hellojpa.jpashop_Ex.inheritanceMapping.Goods;
-import hellojpa.jpashop_Ex.inheritanceMapping.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;

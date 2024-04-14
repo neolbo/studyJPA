@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @SequenceGenerator(name = "order_seq_generator", sequenceName = "order_seq")
-public class Order {
+public class Order extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "order_id")
