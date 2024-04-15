@@ -28,6 +28,22 @@ public class Member extends BaseEntity {
     })
     private Address workAddress;
 
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public Address getWorkAddress() {
+        return workAddress;
+    }
+
+    public void setWorkAddress(Address workAddress) {
+        this.workAddress = workAddress;
+    }
+
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 

@@ -1,5 +1,7 @@
 package hellojpa;
 
+import hellojpa.jpashop_Ex.domain.Address;
+import hellojpa.jpashop_Ex.domain.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
