@@ -3,7 +3,9 @@ package hellojpa.jpashop_Ex.domain;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @SequenceGenerator(name = "member_seq_generator", sequenceName = "member_seq")
@@ -17,16 +19,42 @@ public class Member extends BaseEntity {
     @Column(name = "user_name")
     private String name;
 
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
     @Embedded
     private Address homeAddress;
 
-    @Embedded       // 임베디드 타입을 한 엔티티에서 2번 이상 사용해야하면 @AttributeOverride 사용
-    @AttributeOverrides({
-            @AttributeOverride(name = "city", column = @Column(name = "work_city")),
-            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
-            @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
-    })
-    private Address workAddress;
+    // 값 타입 컬랙션 사용 ----
+    @ElementCollection
+    @CollectionTable(name = "favorite_food",
+            joinColumns = @JoinColumn(name = "member_id"))
+    @Column(name = "food_name")
+    private Set<String> favoriteFoods = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "address",
+            joinColumns = @JoinColumn(name = "member_id"))
+    private List<Address> addressHistory = new ArrayList<>();
+
+
+    //-----
+
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
+    }
+
+    public void setFavoriteFoods(Set<String> favoriteFoods) {
+        this.favoriteFoods = favoriteFoods;
+    }
+
+    public List<Address> getAddressHistory() {
+        return addressHistory;
+    }
+
+    public void setAddressHistory(List<Address> addressHistory) {
+        this.addressHistory = addressHistory;
+    }
 
     public Address getHomeAddress() {
         return homeAddress;
@@ -35,17 +63,6 @@ public class Member extends BaseEntity {
     public void setHomeAddress(Address homeAddress) {
         this.homeAddress = homeAddress;
     }
-
-    public Address getWorkAddress() {
-        return workAddress;
-    }
-
-    public void setWorkAddress(Address workAddress) {
-        this.workAddress = workAddress;
-    }
-
-    @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
 
     public Long getId() {
         return id;
