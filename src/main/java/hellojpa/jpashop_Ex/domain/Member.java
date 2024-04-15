@@ -7,17 +7,26 @@ import java.util.List;
 
 @Entity
 @SequenceGenerator(name = "member_seq_generator", sequenceName = "member_seq")
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "member_id")
     private Long id;
 
     @Column(name = "user_name")
     private String name;
-    private String city;
-    private String street;
-    private String zipcode;
+
+    @Embedded
+    private Address homeAddress;
+
+    @Embedded       // 임베디드 타입을 한 엔티티에서 2번 이상 사용해야하면 @AttributeOverride 사용
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
+    })
+    private Address workAddress;
 
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
@@ -36,30 +45,6 @@ public class Member extends BaseEntity{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
     }
 
     public List<Order> getOrders() {
