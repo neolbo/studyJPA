@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.*;
+
 @Entity
 public class Member {
 
@@ -13,12 +15,18 @@ public class Member {
     private String username;
     private int age;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
+
+    // 연관관계 편의 메서드
+    public void changeTeam(Team team) {
+        this.team = team;
+        team.getMemberList().add(this);
+    }
 
     public Long getId() {
         return id;
@@ -42,6 +50,14 @@ public class Member {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     @Override

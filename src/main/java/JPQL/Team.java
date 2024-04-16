@@ -30,4 +30,16 @@ public class Team {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<Member> getMemberList() {
+        return memberList;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

@@ -16,26 +16,41 @@ public class JpqlMain {
         tx.begin();
 
         try {
-            // 페이징
+            // 조인
 
-            for(int i=0; i<100; ++i) {
-                Member member = new Member();
-                member.setUsername("Member" + i);
-                member.setAge(i);
-                em.persist(member);
-            }
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("Member");
+            member.setAge(10);
+            member.changeTeam(team);
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            List<Member> resultList = em.createQuery("select m from Member as m order by m.age desc", Member.class)
-                    .setFirstResult(5)      // 0번 index 부터 가능
-                    .setMaxResults(10)
+            // 내부 조인
+//            String qlString = "select m from Member as m join m.team t";
+
+            // 외부 조인
+//            String qlString = "select m from Member m left join m.team t";
+
+            // 세타 조인
+//            String qlString = "select count(m) from Member m, Team t where m.username = t.name";
+
+            // on 절 ( join 대상 필터링)
+//            String qlString = "select m from Member m join m.team t on t.name = 'A'";
+
+            // 연관 관계 없는 엔티티끼리의 외부 조인
+            String qlString = "select m from Member m left join Team t on m.username = t.name";
+
+            List<Member> resultList = em.createQuery(qlString, Member.class)
                     .getResultList();
 
-            for (Member member : resultList) {
-                System.out.println("member.toString() : " + member.toString());
-            }
+
+
 
             tx.commit();
         } catch (Exception e) {
