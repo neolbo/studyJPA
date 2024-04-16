@@ -16,63 +16,61 @@ public class JpqlMain {
         tx.begin();
 
         try {
+            // 프로젝션
+
             Member member = new Member();
             member.setUsername("A");
             member.setAge(10);
             em.persist(member);
 
-            Query query = em.createQuery("select m from Member as m");
+            em.flush();
+            em.clear();
 
-            TypedQuery<Member> query1 = em.createQuery("select m from Member as m", Member.class);
+            // entity, embedded type (Address.class) 으로 프로젝션 가능
 
+            List<Member> result = em.createQuery("select m from Member as m", Member.class)
+                    .getResultList();
+            /**
+             *  쿼리로 뽑아온 result(m) 도 영속성으로 관리 된다!
+             */
+            Member member1 = result.get(0);
+            member1.setAge(20);
+            // ==>> 이름이 A인 member 의 나이가 20으로 db 업데이트
 
-            TypedQuery<Member> query2 = em.createQuery("select m from Member as m where username = :username", Member.class);
-            String userNameParam = "nameValue";
-            query2 = query2.setParameter("username", userNameParam);
-            List<Member> resultList = query2.getResultList();
-            if (resultList.isEmpty()) {
-                System.out.println("resultList: " + resultList);
-                System.out.println("getResultList() 는 값이 없어도 noResultException 발생 x, list : null");
-            }
+            em.flush();
+            em.clear();
 
+            // distinct 로 중복 제거도 가능  select distinct ~~ from ~~
 
-            // getSingleResult() 는 값이 없으면 NoResultException, 2 이상이면 NonUniqueResultException 발생
-            try {
-                Member find = em.createQuery("select m from Member as m where id = :id", Member.class)
-                        .setParameter("id", 2L)
-                        .getSingleResult();
-            } catch (NoResultException e) {
-                e.printStackTrace();
-            }
-
-            Member member2 = new Member();
-            member2.setUsername("A");
-            member2.setAge(20);
-            em.persist(member2);
-
-            try{
-                Member singleResult = em.createQuery("select m from Member as m where username = :username", Member.class)
-                        .setParameter("username", "A")
-                        .getSingleResult();
-            } catch (NonUniqueResultException e) {
-                e.printStackTrace();
-            }
-
-            // count(m), sum(m.age), avg(m.age), max(m.age), min(m.age) 가능
-            em.createQuery("select count(m), sum(m.age), avg(m.age), max(m.age), min(m.age) from Member as m");
-
-            // 값 타입으로 반환 가능
-            Order order = new Order();
-            order.setAddress(new Address("cityy", "streett", "zipcodee"));
-            em.persist(order);
-
-            Address ad = em.createQuery("select o.address from Order o where id = :id", Address.class)
-                    .setParameter("id", 1L)
-                    .getSingleResult();
-            System.out.println("ad.getCity(): " + ad.getCity());
-            System.out.println("ad.getStreet(): " + ad.getStreet());
-            System.out.println("ad.getZipcode(): " + ad.getZipcode());
-
+            /**
+             *  스칼라 타입 프로젝션에서 값 가져오는 방법
+             */
+            // 방법 1. 타입 캐스팅해서 사용
+        /*
+            List resultList = em.createQuery("select m.username, m.age from Member as m")
+                    .getResultList();
+            Object o = resultList.get(0);
+            Object[] r = (Object[]) o;
+            System.out.println("name: " + r[0]);
+            System.out.println("age: " + r[1]);
+        */
+            // 방법 2. Object[]로 query 반환
+        /*
+            List<Object[]> resultList = em.createQuery("select m.username, m.age from Member as m")
+                    .getResultList();
+            Object[] r = resultList.get(0);
+            System.out.println("name: " + r[0]);
+            System.out.println("age: " + r[1]);
+        */
+            // 방법 3. new 명령어로 조회 (DTO사용)
+            // 쿼리문 작성을 string 으로 하기에 DTO 클래스명을 패키지까지 직접 작성해줘야함... import 불가
+            // 찾고자하는 데이터와 (순서, 타입) 이 같은 '생성자' 필요
+                    // 순서가 다르거나 타입이 다르면 IllegalStateException 발생
+            List<MemberDTO> resultList = em.createQuery("select new JPQL.MemberDTO(m.username, m.age) from Member as m", MemberDTO.class)
+                    .getResultList();
+            MemberDTO memberDTO = resultList.get(0);
+            System.out.println("memberDTO.getUsername(): " + memberDTO.getUsername());
+            System.out.println("memberDTO.getAge(): " + memberDTO.getAge());
 
             tx.commit();
         } catch (Exception e) {
