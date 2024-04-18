@@ -24,10 +24,16 @@ public class JpqlMain {
             em.persist(team);
 
             Member member = new Member();
-            member.setUsername("Member");
+            member.setUsername("MemberA");
             member.setAge(10);
             member.changeTeam(team);
             em.persist(member);
+
+            Member member2 = new Member();
+            member2.setUsername("관리자");
+            member2.setAge(10);
+            member2.changeTeam(team);
+            em.persist(member2);
 
             em.flush();
             em.clear();
@@ -45,8 +51,10 @@ public class JpqlMain {
 //          subquery(em);
 
             // type
-            type(em);
+//            type(em);
 
+            // conditional
+            conditional(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -56,6 +64,36 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    public static void conditional(EntityManager em) {
+        // 기본 case 식
+/*        String query = "select " +
+                "case when m.age<=10 then '학생 요금' " +
+                "     when m.age>=60 then '경로 요금' " +
+                "     else '일반 요금' " +
+                "end " +
+                "from Member m";
+
+        List<String> resultList = em.createQuery(query, String.class).getResultList();
+        for (String s : resultList) {
+            System.out.println("s = " + s);
+        }
+*/
+        // coalesce => 하나씩 조회해서 null 이 아니면 반환
+/*        String query = "select coalesce(m.username, '이름이 없는 회원') from Member m";
+        List<String> resultList = em.createQuery(query, String.class).getResultList();
+        for (String s : resultList) {
+            System.out.println("s = " + s);
+        }
+*/
+        // nullif => 두 값이 같으면 null 반환,  다르면 첫번째 값 반환
+        // 사용자 이름이 '관리자' 이면 null 반환     => 관리자 숨길 때 사용
+        String query = "select nullif(m.username, '관리자') from Member m";
+        List<String> resultList = em.createQuery(query, String.class).getResultList();
+        for (String s : resultList) {
+            System.out.println("s = " + s);
+        }
     }
 
     public static void type(EntityManager em) {
