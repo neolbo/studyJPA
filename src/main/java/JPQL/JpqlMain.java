@@ -44,6 +44,8 @@ public class JpqlMain {
             // sub query
 //          subquery(em);
 
+            // type
+            type(em);
 
 
             tx.commit();
@@ -54,6 +56,35 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    public static void type(EntityManager em) {
+        // 문자는 ' ' 로 ,  she's 같은 ' 는 'she''s' 로 표현  ' => ''
+//        String query = "select m from Member m where m.username = 'A'";
+
+        // 숫자는 10L(Long) 20F(Float) 30D(Double)
+//        String query = "select m from Member m where m.age = 10L";
+//
+//        List<Member> resultList = em.createQuery(query, Member.class)
+//                .getResultList();
+
+        // boolean => true, false
+        /*List<Object[]> resultList = em.createQuery("select m, true from Member m").getResultList();
+        Object[] o = resultList.get(0);
+        System.out.println(o[0]);       // m
+        System.out.println(o[1]);       // true*/
+
+        // enum
+//        String query = "select m from Member m where m.memberType = JPQL.MemberType.ADMIN";     // 하드코딩 시 패키지명
+//        String query = "select m from Member m where m.memberType = :memberType";
+//        List<Member> resultList = em.createQuery(query, Member.class)
+//                .setParameter("memberType", MemberType.USER)
+//                .getResultList();
+
+        // type(m)  ==> 상속 관계에서 사용
+//        em.createQuery("select i from Item i where type(i) = Book", Item.class)
+//                .getResultList();
+
     }
 
     public static void projection(EntityManager em) {
@@ -105,7 +136,7 @@ public class JpqlMain {
     }
 
     public static void paging(EntityManager em) {
-        for(int i=1; i<100; ++i) {
+        for (int i = 1; i < 100; ++i) {
             Member member = new Member();
             member.setUsername("Member" + i);
             member.setAge(i);

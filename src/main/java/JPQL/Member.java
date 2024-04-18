@@ -22,6 +22,9 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private MemberType memberType;
+
     // 연관관계 편의 메서드
     public void changeTeam(Team team) {
         this.team = team;
