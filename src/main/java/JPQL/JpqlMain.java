@@ -1,9 +1,6 @@
 package JPQL;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -19,24 +16,7 @@ public class JpqlMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
-
-            Member member = new Member();
-            member.setUsername("           MemberA           ");
-            member.setAge(10);
-            member.changeTeam(team);
-            em.persist(member);
-
-            Member member2 = new Member();
-            member2.setUsername("관 리 자");
-            member2.setAge(10);
-            member2.changeTeam(team);
-            em.persist(member2);
-
-            em.flush();
-            em.clear();
+            init(em);
 
             // projection
 //            projection(em);
@@ -56,7 +36,9 @@ public class JpqlMain {
             // conditional
 //            conditional(em);
 
-            basic_function(em);
+//            basic_function(em);
+
+            fetchJoin(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -66,6 +48,168 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    private static void init(EntityManager em) {
+        Team team = new Team();
+        team.setName("teamA");
+        em.persist(team);
+
+        Member member = new Member();
+        member.setUsername("Member_A");
+        member.setAge(10);
+        member.changeTeam(team);
+        em.persist(member);
+
+        Member member2 = new Member();
+        member2.setUsername("Member_B");
+        member2.setAge(10);
+        member2.changeTeam(team);
+        em.persist(member2);
+
+        em.flush();
+        em.clear();
+    }
+
+    public static void fetchJoin(EntityManager em) {
+        // 연관된 엔티티나 컬렉션을 한번에 조회하는 기능
+        // LAZY fetch 되어 있더라도 join fetch 가 우선 순위  ==> EAGER 처럼 한번에 조회
+
+        Team team = new Team();
+        team.setName("teamB");
+        em.persist(team);
+
+        Member member1 = new Member();
+        member1.setUsername("Member_C");
+        member1.changeTeam(team);
+        em.persist(member1);
+
+        Member member2 = new Member();
+        member2.setUsername("Member_D");
+        em.persist(member2);        // 팀 없음
+
+        em.flush();
+        em.clear();
+        // -------- setting
+
+        /**
+         * 일반 inner join 을 하면 lazy로 연관관계가 설정되어있기 때문에
+         * 'select m from Member m' 쿼리에서의 team 은 프록시이다.
+         * ==> member.getTeam() 으로 실제 team을 조회하려 할 때마다 쿼리를 새로 보내야한다.
+         * -> n + 1 문제 발생
+         */
+/*
+        String query = "select m from Member m join m.team t";
+        List<Member> resultList = em.createQuery(query, Member.class).getResultList();
+        for (Member member : resultList) {
+            System.out.println("member = " + member + "team.name = " + member.getTeam().getName());
+        }
+*/
+        // member_A => teamA(SQL)
+        // member_B => teamA(1차 캐시)
+        // member_C => teamBB(SQL)
+        // 총 3번의 SQL 문이 나감.  모든 멤버의 팀이 다르다면 최대 n + 1번의 SQL 문이 필요함
+
+/*
+        */
+/**
+         * 새로운 DTO를 만들어 일반 inner join 하면 SQL 1개로 조회 가능하지만
+         * mtdto.getMember().getUsername().... 접근하기가..
+         *//*
+
+        String query = "select new JPQL.MTDTO(m, t) from Member m join m.team t";
+        List<MTDTO> resultList = em.createQuery(query, MTDTO.class).getResultList();
+        for (MTDTO mtdto : resultList) {
+            System.out.println("member = " + mtdto.getMember().getUsername() + "team.name = " + mtdto.getTeam().getName());
+        }
+*/
+
+        /**
+         * fetch join 을 사용하여 한번에 떙겨오기
+         * member, team 한번에 select
+         *
+         * entity fetch join
+         */
+/*
+        String query = "select m from Member m join fetch m.team";
+        List<Member> resultList = em.createQuery(query, Member.class).getResultList();
+        for (Member member : resultList) {
+            System.out.println("member = " + member + " team = " + member.getTeam().getName());
+        }
+*/
+        /**
+         * left join fetch
+         */
+/*
+        String query = "select m from Member m left join fetch m.team";
+        List<Member> resultList = em.createQuery(query, Member.class).getResultList();
+        for (Member member : resultList) {
+            if(member.getTeam() == null) {
+                System.out.println("member = " + member + " team = null");
+            }
+            else
+                System.out.println("member = " + member + " team = " + member.getTeam().getName());
+        }
+*/
+
+        /**
+         * collection fetch join
+         */
+/*
+        String query = "select t from Team t join fetch t.memberList";
+        List<Team> resultList = em.createQuery(query, Team.class).getResultList();
+        for (Team team1 : resultList) {
+            System.out.println("team = " + team1 + "|" + "member = " + team1.getMemberList().size());
+            for (Member member : team1.getMemberList()) {
+                System.out.println("member = " + member);
+            }
+        }
+*/
+
+        /**
+         * collection 을 fetch join 하면 paging 사용 불가
+         *
+         * 17:36 WARN  org.hibernate.orm.query - HHH90003004:
+         *          firstResult/maxResults specified with collection fetch; applying in memory
+         * ==> OneToMany 관계일 때 join 하면 데이터가 더 많아질 수 있기에 paging 하면 데이터 잘릴 수 있어 금지
+         */
+/*
+        String query = "select t from Team t join fetch t.memberList";
+        List<Team> resultList1 = em.createQuery(query, Team.class)
+                .setFirstResult(0)
+                .setMaxResults(1)
+                .getResultList();
+        for (Team team1 : resultList1) {
+            System.out.println("team1 = " + team1);
+        }
+*/
+
+        /**
+         *  해결 방안 1.
+         *      OneToMany 를 뒤집어 ManyToOne 으로 select 해 paging 한다.
+         *          'select m from Member m join fetch m.team' 으로 쿼리 날리고 paging
+         *  해결 방안 2.
+         *      @BatchSize(size = )이용  or  글로벌로 batchsize 설정 (<property name="hibernate.default_batch_fetch_size" value="100"/>)
+         *          'select t from Team t' 를 날리고 paging  ==> t.getMember() 쓸 때마다 sql 나가지만
+         *          @BatchSize() 이용하면 batchsize 만큼 team.id를 리스트로 들고가 member 한번에 조회
+         *          batch size 는 1000 이하로 설정
+         */
+        String query = "select t from Team t";
+        List<Team> resultList = em.createQuery(query, Team.class)
+                .setFirstResult(0)
+                .setMaxResults(1)
+                .getResultList();
+        for (Team team1 : resultList) {
+            System.out.println("team1 = " + team1);
+            for (Member member : team1.getMemberList()) {
+                System.out.println("member = " + member);
+            }
+        }
+
+        /**
+         * 아무튼 여러 테이블 조인해서 엔티티가 가진 모양이 아니고 비정제된 결과를 내야하면
+         * fetch join 보단 일반 join 사용해서 DTO 로 변환!!
+         */
     }
 
     public static void basic_function(EntityManager em) {
