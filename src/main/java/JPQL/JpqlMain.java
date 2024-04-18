@@ -24,13 +24,13 @@ public class JpqlMain {
             em.persist(team);
 
             Member member = new Member();
-            member.setUsername("MemberA");
+            member.setUsername("           MemberA           ");
             member.setAge(10);
             member.changeTeam(team);
             em.persist(member);
 
             Member member2 = new Member();
-            member2.setUsername("관리자");
+            member2.setUsername("관 리 자");
             member2.setAge(10);
             member2.changeTeam(team);
             em.persist(member2);
@@ -54,7 +54,9 @@ public class JpqlMain {
 //            type(em);
 
             // conditional
-            conditional(em);
+//            conditional(em);
+
+            basic_function(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -64,6 +66,49 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    public static void basic_function(EntityManager em) {
+        // concat
+//        String query = "select concat(m.username, m.age) from Member m";
+//        String query = "select 'a' || 'b' from Member m";
+
+        // substring
+//        String query = "select substring(m.username, 1, 3) from Member m ";     // 첫번째부터 3개
+
+        // trim         ==> 좌우 공백만 제거  => -관 리 자-
+//        String query = "select trim(m.username) from Member m ";
+
+        // lower, upper
+//        String query = "select lower('ABCDE')";
+        /*String query = "select upper('abcde')";
+
+        List<String> resultList = em.createQuery(query, String.class).getResultList();
+        for (String s : resultList) {
+            System.out.println("s = " + s);
+        }*/
+
+        // length
+//        String query = "select length('abcde')";
+
+        // locate       // b 에 a 가 몇 번째에 있는지 반환 , 없으면 0
+//        String query = "select locate('ll', 'hello')";
+//        String query = "select locate('ab', 'djrabkdab', 5)";       // i 위치부터 b에 a가 처음으로 나오는 위치
+
+//        String query = "select abs(-23)";
+//        String query = "select sqrt(4)";        // double
+//        String query = "select mod(4,3)";       // a를 b로 나눈 나머지
+
+        // size     // collection size
+        String query = "select size(t.memberList) from Team t";
+
+        List<Integer> resultList = em.createQuery(query, Integer.class).getResultList();
+        for (Integer i : resultList) {
+            System.out.println("i = " + i);
+        }
+
+
+
     }
 
     public static void conditional(EntityManager em) {
