@@ -40,7 +40,9 @@ public class JpqlMain {
 
 //            fetchJoin(em);
 
-            namedQuery(em);
+//            namedQuery(em);
+
+            bulkOperation(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -50,6 +52,22 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    private static void bulkOperation(EntityManager em) {
+        /**
+         *  벌크 연산은 영속성 컨텍스트 무시하고 바로 DB에 직접 쿼리
+         *      ==> 벌크 연산으로 값을 변경해도 영속성 1차 캐시에는 값 변동 없음!
+         *
+         *      해결 방안 1.
+         *          1차 캐시에 아무 값도 없을 때 벌크 연산부터 실행
+         *      해결 방안 2.
+         *          벌크 연산 실행 후 1차 캐시 초기화.
+         *          query 나가기 전에는 무조건 flush 되기 때문에 벌크 연산 전 flush 는 고려 x
+         */
+        int resultCount = em.createQuery("update Member m set m.age = 60")
+                .executeUpdate();
+        System.out.println("resultCount = " + resultCount);
     }
 
     private static void namedQuery(EntityManager em) {
