@@ -5,12 +5,19 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "Member.findByUsername", query="select m from Member m where m.username = :username"),
+        @NamedQuery(
+                name = "Member.findByAge", query = "select m from Member m where m.age = :age")
+})
 public class Member {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     private String username;
     private int age;

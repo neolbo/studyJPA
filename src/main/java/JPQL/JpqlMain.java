@@ -38,7 +38,9 @@ public class JpqlMain {
 
 //            basic_function(em);
 
-            fetchJoin(em);
+//            fetchJoin(em);
+
+            namedQuery(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -48,6 +50,24 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    private static void namedQuery(EntityManager em) {
+        List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                .setParameter("username", "Member_A")
+                .getResultList();
+
+        for (Member member : resultList) {
+            System.out.println("member = " + member);
+        }
+
+        List<Member> resultList1 = em.createNamedQuery("Member.findByAge", Member.class)
+                .setParameter("age", 20)
+                .getResultList();
+
+        for (Member member : resultList1) {
+            System.out.println("member = " + member);
+        }
     }
 
     private static void init(EntityManager em) {
@@ -63,7 +83,7 @@ public class JpqlMain {
 
         Member member2 = new Member();
         member2.setUsername("Member_B");
-        member2.setAge(10);
+        member2.setAge(20);
         member2.changeTeam(team);
         em.persist(member2);
 
