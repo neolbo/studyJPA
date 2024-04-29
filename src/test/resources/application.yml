@@ -1,0 +1,23 @@
+spring:
+# Spring Boot 사용 시 설정 값 없으면 자동으로 in-memory test
+
+#  datasource:
+#    url: jdbc:h2:mem:test   # h2 in-memory test url
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop     # spring boot 는 기본적으로 create-drop 으로 실행
+#    properties:
+#      hibernate: 
+##        show_sql: true
+#        format_sql: true
+#    open-in-view: false
+
+logging:
+  level:
+    org.hibernate:
+      SQL: debug
+      orm.jdbc.bind: trace
