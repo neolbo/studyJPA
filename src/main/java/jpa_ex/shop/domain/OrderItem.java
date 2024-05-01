@@ -1,5 +1,6 @@
 package jpa_ex.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jpa_ex.shop.domain.item.Item;
 import lombok.AccessLevel;
@@ -18,6 +19,7 @@ public class OrderItem {
     @GeneratedValue
     private Long id;
 
+//    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
     @Setter

@@ -3,7 +3,7 @@ package jpa_ex.shop.controller;
 import jpa_ex.shop.domain.Member;
 import jpa_ex.shop.domain.Order;
 import jpa_ex.shop.domain.item.Item;
-import jpa_ex.shop.repository.OrderSearch;
+import jpa_ex.shop.repository.order.OrderSearch;
 import jpa_ex.shop.service.ItemService;
 import jpa_ex.shop.service.MemberService;
 import jpa_ex.shop.service.OrderService;

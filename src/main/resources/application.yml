@@ -7,8 +7,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
-    #      ddl-auto: create
+#      ddl-auto: none
+          ddl-auto: create
     properties:
       hibernate:
 #        show_sql: true
@@ -19,4 +19,4 @@ logging:
   level:
     org.hibernate:
       SQL: debug
-      orm.jdbc.bind: trace
+#      orm.jdbc.bind: trace

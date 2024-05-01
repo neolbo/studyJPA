@@ -27,9 +27,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5-jakarta'
+
 	implementation 'org.springframework.boot:spring-boot-devtools'
 
-//	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'

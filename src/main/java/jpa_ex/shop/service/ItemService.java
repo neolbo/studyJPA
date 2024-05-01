@@ -4,7 +4,6 @@ import jpa_ex.shop.domain.item.Book;
 import jpa_ex.shop.domain.item.Item;
 import jpa_ex.shop.dto.UpdateItemDto;
 import jpa_ex.shop.repository.ItemRepository;
-import jpa_ex.shop.web.BookForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

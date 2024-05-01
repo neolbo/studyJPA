@@ -1,5 +1,6 @@
 package jpa_ex.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jpa_ex.shop.domain.status.DeliveryStatus;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class Delivery {
     @Setter
     private DeliveryStatus status;
 
+//    @JsonIgnore
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
     @Setter
     private Order order;

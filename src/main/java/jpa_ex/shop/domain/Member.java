@@ -1,5 +1,6 @@
 package jpa_ex.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class Member {
     @Setter
     private Address address;
 
+//    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
 }
