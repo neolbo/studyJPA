@@ -13,6 +13,7 @@ spring:
       hibernate:
 #        show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100   # size 는 100~1000 적당
 #    open-in-view: false
 
 logging:

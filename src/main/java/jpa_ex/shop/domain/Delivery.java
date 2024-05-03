@@ -24,7 +24,7 @@ public class Delivery {
     @Setter
     private DeliveryStatus status;
 
-//    @JsonIgnore
+    @JsonIgnore
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
     @Setter
     private Order order;

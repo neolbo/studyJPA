@@ -23,7 +23,7 @@ public class Member {
     @Setter
     private Address address;
 
-//    @JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
 }

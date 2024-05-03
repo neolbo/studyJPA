@@ -7,7 +7,6 @@ import jpa_ex.shop.domain.Member;
 import jpa_ex.shop.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +60,7 @@ public class MemberApiController {
      * 회원 정보만을 원했지만 응답 값으로 entity 를 직접 노출 ==> 필요없는 orders 까지 끌고옴
      * 이걸 막기 위해 필요 없는 필드에 @JsonIgnore 를 해줄 수도 있지만
      * 하나의 Entity 에 여러 API 를 위한 프레젠테이션 응답 로직 담기 불가
-     *
+     * <p>
      * ==> API 응답 스펙에 맞게 별도의 DTO 만들어야함!
      */
     @GetMapping("/api/v1/members")

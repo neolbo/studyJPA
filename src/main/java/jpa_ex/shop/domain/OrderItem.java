@@ -19,7 +19,7 @@ public class OrderItem {
     @GeneratedValue
     private Long id;
 
-//    @JsonIgnore
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
     @Setter

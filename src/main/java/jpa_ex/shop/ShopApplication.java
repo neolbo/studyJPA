@@ -12,7 +12,6 @@ public class ShopApplication {
 		SpringApplication.run(ShopApplication.class, args);
 	}
 
-/*
 	@Bean
 	Hibernate5JakartaModule hibernate5JakartaModule() {
 		Hibernate5JakartaModule hibernate5JakartaModule = new Hibernate5JakartaModule();
@@ -22,5 +21,4 @@ public class ShopApplication {
 
 		return hibernate5JakartaModule;
 	}
-*/
 }
